@@ -15,6 +15,6 @@ app.post("/send-mqtt", function(req, res) {
     res.status(200).send("Message sent to mqtt");
 });
 
-var server = app.listen(1883, function() {
-    console.log("app running on port.", server.address().port);
+var server = app.listen(8000, function() {
+    console.log("app running on Rest api port.", server.address().port);
 });

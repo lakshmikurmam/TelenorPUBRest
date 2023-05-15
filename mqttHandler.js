@@ -2,7 +2,7 @@ const mqtt = require('mqtt');
 
 class MQTTHandler {
     constructor(brokerUrl, clientId, secretKey) {
-        brokerUrl = '10.246.0.10'
+        brokerUrl = '10.246.0.10:1883'
         this.client = mqtt.connect(brokerUrl, {
             clientId: 'gepc-producer',
             username: '95cb7981-3d4c-4b35-aff0-73d5150be1be',
