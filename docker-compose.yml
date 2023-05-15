@@ -1,0 +1,22 @@
+#Lakshmi121
+version: '3'
+x-mqtt-broker: &mqtt-broker # broker mqtt
+  BROKER_MQTT: mqtt://test.mosquitto.org
+  BROKER_MQTT_USER: admin
+  BROKER_MQTT_PASSWORD: admin
+  BROKER_MQTT_PORT: 1883
+  BROKER_MQTT_HOST: mosquitto
+  BROKER_MQTT_PROTOCOL: mqtt
+services:
+
+  app:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    container_name: docker-node-testclone
+    restart: always
+    ports:
+      - 4027:8080
+    
+
+   

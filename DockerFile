@@ -1,0 +1,11 @@
+#Lakshmi121
+# syntax=docker/dockerfile:1
+
+FROM node:12.18.1
+
+RUN apt-get -y install git
+
+RUN git clone https://github.com/lakshmikurmam/TelenorGE_Docker.git /var/www/lakshmi1/TelenorGE_Docker
+#changes 
+EXPOSE 8080
+CMD ["node","/var/www/lakshmi1/TelenorGE_Docker/Client/client.js"]
