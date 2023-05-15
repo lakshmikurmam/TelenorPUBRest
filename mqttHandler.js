@@ -1,54 +1,61 @@
-const mqtt = require('mqtt')
+const mqtt = require('mqtt');
 
 class MQTTHandler {
-    constructor(host) {
+    constructor(brokerUrl, clientId, secretKey) {
+        brokerUrl = '10.246.0.10:1883'
+        this.client = mqtt.connect(brokerUrl, {
+            clientId: 'gepc-producer',
+            username: '95cb7981-3d4c-4b35-aff0-73d5150be1be',
+            password: 'Bearer 95cb7981-3d4c-4b35-aff0-73d5150be1be:gepc-producer:26afc6e1'
 
-        this.host = '10.246.0.10';
-        this.port = 1883;
-        this.AppID = '95cb7981-3d4c-4b35-aff0-73d5150be1be';
-        this.token = 'Bearer f44a7c6a-219f-417d-9a1d-f2bafd38ad53:gepc-subs:14d1b530';
-
-        /*this.host = 'https://mosquitto.org/';
-        this.port = 1883;
-        this.clientid = '963f3d5972dc4962aff21937eebd6a60';*/
-
+        });
+        this.client.on('connect', () => {
+            console.log('Connected to MQTT broker');
+        });
+        this.client.on('error', (err) => {
+            console.log(`MQTT error: ${err}`);
+        });
     }
 
-    connect() {
-        this.client = mqtt.connect(this.host)
-
-        this.client.on('error', function(err) {
-            console.log(err)
-            this.client.end()
-        })
-
-        this.client.on('connect', function() {
-            console.log('MQTT client connected...')
-        })
-
-        // I need this to send message back to app.js
-        this.client.on('message', function(topic, message) {
-            if (!message.toString()) message = 'null'
-
-            console.log(JSON.parse(message.toString()))
-        })
-
-        this.client.on('close', function() {
-            console.log('MQTT client connected...')
-        })
+    subscribe(topic) {
+        this.client.subscribe(topic, (err) => {
+            if (err) {
+                console.log(`Failed to subscribe to topic: ${err}`);
+            } else {
+                console.log(`Subscribed to topic ${topic}`);
+            }
+        });
     }
 
-    subscribeTopic(topic) {
-        this.client.subscribe(topic)
+    publish(topic, message) {
+        this.client.publish(topic, message, (err) => {
+            if (err) {
+                console.log(`Failed to publish message: ${err}`);
+            } else {
+                console.log(`Message published to topic ${topic}: ${message}`);
+            }
+        });
     }
 
-    unsubscribeTopic(topic) {
-        this.client.unsubscribe(topic)
+    onMessage(callback) {
+        this.client.on('message', (topic, message) => {
+            callback(topic, message);
+        });
     }
 
-    sendMessage(topic, message) {
-        this.client.publish(topic, message)
+    disconnect() {
+        this.client.end();
+        console.log('Disconnected from MQTT broker');
     }
 }
-
-module.exports = MQTTHandler
+/*
+// Example usage
+const mqttClient = new MQTTHandler('mqtt://<broker-url>', '<client-id>', '<secret-key>');
+mqttClient.subscribe('<topic>');
+mqttClient.publish('<topic>', '<message>');
+mqttClient.onMessage((topic, message) => {
+    console.log(`Received message on topic ${topic}: ${message}`);
+});
+mqttClient.disconnect();
+*/
+module.exports = MQTTHandler;
