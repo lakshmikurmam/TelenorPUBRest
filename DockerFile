@@ -1,11 +1,20 @@
-#Lakshmi121
-# syntax=docker/dockerfile:1
+# Use an official Node.js runtime as a parent image
+FROM node:14-alpine
 
-FROM node:12.18.1
+# Set the working directory to /app
+WORKDIR /app
 
-RUN apt-get -y install git
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-RUN git clone https://github.com/lakshmikurmam/TelenorGE_Docker.git /var/www/lakshmi1/TelenorGE_Docker
-#changes 
-EXPOSE 8080
-CMD ["node","/var/www/lakshmi1/TelenorGE_Docker/Client/client.js"]
+# Install dependencies
+RUN npm install
+
+# Copy the application code to the working directory
+COPY . .
+
+# Expose port 3000 for the Node.js app
+EXPOSE 3000
+
+# Run the Node.js app when the container starts
+CMD ["node", "./simpletest.js"]

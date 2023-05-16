@@ -1,22 +1,15 @@
-#Lakshmi121
-version: '3'
-x-mqtt-broker: &mqtt-broker # broker mqtt
-  BROKER_MQTT: mqtt://test.mosquitto.org
-  BROKER_MQTT_USER: admin
-  BROKER_MQTT_PASSWORD: admin
-  BROKER_MQTT_PORT: 1883
-  BROKER_MQTT_HOST: mosquitto
-  BROKER_MQTT_PROTOCOL: mqtt
+version: '3.7'
+
 services:
-
-  app:
-    build: .
-    volumes:
-      - .:/usr/src/app
-    container_name: docker-node-testclone
-    restart: always
+  mqtt:
+    image: GE_CONNECT
+    environment:
+      - MQTT_HOST=mqtt://10.246.0.10:1883
+      - MQTT_PORT=8883
+      - MQTT_CLIENTID=95cb7981-3d4c-4b35-aff0-73d5150be1be
+      - MQTT_USERNAME=gepc-producer
+      - MQTT_PASSWORD=26afc6e1
     ports:
-      - 4027:8080
-    
-
-   
+      - "1883:1883"
+      - "8883:8883"
+    restart: always
