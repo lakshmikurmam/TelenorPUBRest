@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   mqtt:
-    image: GE_CONNECT
+    image: geconnectimage
     environment:
       - MQTT_HOST=mqtt://10.246.0.10:1883
       - MQTT_PORT=8883
