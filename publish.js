@@ -30,7 +30,7 @@ const port = 3000;
 var bodyParser = require("body-parser");
 
 console.log('Trying to connect');
-const mqttClient = mqtt.connect('mqtt://10.246.0.10:1883', '95cb7981-3d4c-4b35-aff0-73d5150be1be', 'Bearer 95cb7981-3d4c-4b35-aff0-73d5150be1be:gepc-producer:26afc6e1');
+const mqttClient = mqtt.connect('mqtt://10.246.0.10:1883', '95cb7981-3d4c-4b35-aff0-73d5150be1be', 'gepc-producer', 'Bearer 95cb7981-3d4c-4b35-aff0-73d5150be1be:gepc-producer:26afc6e1');
 
 mqttClient.on('connect', () => {
     console.log('Connected to MQTT broker');
