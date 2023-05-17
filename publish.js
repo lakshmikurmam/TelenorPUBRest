@@ -6,6 +6,7 @@ const clientId = '95cb7981-3d4c-4b35-aff0-73d5150be1be';
 const host = '10.246.0.10:1883';
 const MQTT_TOPIC = 'MC/V1/testing';
 const MQTT_QOS = 1;
+MQTT_MESSAGE = 'Hello Message Published !'
 const client = mqtt.connect(`mqtt://${username}:${password}@${host}`, {
     clientId,
     clean: true,
