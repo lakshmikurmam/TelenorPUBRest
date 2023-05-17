@@ -16,5 +16,5 @@ COPY . .
 # Expose port 3000 for the Node.js app
 EXPOSE 3000
 
-# Run the Node.js app when the container starts
-CMD ["node", "./simpletest.js"]
+# Run the Node.js app when the container starts changes
+CMD ["node", "./publish.js"]
