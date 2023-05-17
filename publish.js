@@ -1,5 +1,5 @@
 const mqtt = require('mqtt');
-
+const crypto = require("crypto");
 const username = 'gepc-producer';
 const password = '26afc6e1';
 const clientId = '95cb7981-3d4c-4b35-aff0-73d5150be1be';
