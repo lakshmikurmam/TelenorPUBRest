@@ -1,60 +1,33 @@
-/*var express = require("express");
-var bodyParser = require("body-parser");
-var app = express();
-var mqttHandler = require('./mqttHandler');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }))
-
-var mqttClient = new mqttHandler();
-console.log("Step1")
-mqttClient.connect();
-console.log("Step2")
-    // Routes
-app.post("/send-mqtt", function(req, res) {
-    mqttClient.publish(req.body.message);
-    res.status(200).send("Message sent to mqtt");
-});
-
-var server = app.listen(8000, function() {
-    console.log("app running on Rest api port.", server.address().port);
-});
-
-*/
-const express = require('express');
 const mqtt = require('mqtt');
 
-const app = express();
-const port = 3000;
-
-var bodyParser = require("body-parser");
-
-console.log('Trying to connect');
-const mqttClient = mqtt.connect('mqtt://10.246.0.10:1883', '95cb7981-3d4c-4b35-aff0-73d5150be1be', 'gepc-producer', 'Bearer 95cb7981-3d4c-4b35-aff0-73d5150be1be:gepc-producer:26afc6e1');
-
-mqttClient.on('connect', () => {
-    console.log('Connected to MQTT broker');
+const username = 'gepc-producer';
+const password = '26afc6e1';
+const clientId = '95cb7981-3d4c-4b35-aff0-73d5150be1be';
+const host = '10.246.0.10:1883';
+const MQTT_TOPIC = 'MC/V1/testing';
+const MQTT_QOS = 1;
+const client = mqtt.connect(`mqtt://${username}:${password}@${host}`, {
+    clientId,
+    clean: true,
+    rejectUnauthorized: false
 });
 
-mqttClient.on('error', (err) => {
-    console.log(`MQTT error: ${err}`);
+client.on('connect', () => {
+    console.log('Connected to Telenor Connexion MQTT broker');
 });
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }))
-app.post('/publish', (req, res) => {
-    // const { topic, message } = req.body;
-
-    mqttClient.publish(req.body.message, (err) => {
-        if (err) {
-            console.log(`Failed to publish message: ${err}`);
-            res.status(500).send('Failed to publish message');
-        } else {
-            console.log(`Message published to topic`);
-            res.status(200).send(`Message published to topic`);
-        }
-    });
+// Publish message to MQTT topic
+client.publish(MQTT_TOPIC, MQTT_MESSAGE, { qos: MQTT_QOS }, function(err) {
+    if (err) {
+        console.error(`Failed to publish message: ${err}`);
+    } else {
+        console.log(`Message published to topic: ${MQTT_TOPIC}`);
+        // Disconnect from MQTT broker
+        client.end();
+        console.log(`Connection END`);
+    }
 });
 
-app.listen(port, () => {
-    console.log(`REST API listening at http://localhost:${port}`);
+
+client.on('error', function(err) {
+    console.error(`Failed to connect to MQTT broker: ${err}`);
 });
