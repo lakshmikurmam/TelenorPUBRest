@@ -35,12 +35,12 @@ client.on('connect', () => {
         let s1 = 'log generated MQ messages publishing :'
         const messageprint1 = year + "-" + month + "-" + date + ":" + sec + s1 + rand + ":"
         "seqid:" + id
-        const messageprint = year + "-" + month + "-" + date + ":" + sec + "Published"
-        const message = 'Published message ' + messageprint;
+        const messageprint = +id
+        const message = +messageprint;
         client.publish(MQTT_TOPIC, message, { qos: MQTT_QOS });
         messageCount++;
 
-        console.log('Published message:', message);
+        console.log('Published message:  ', message);
 
         // setTimeout(publishmessage, 5000); // Publish a new message every 1 second
         // } else {
@@ -55,11 +55,11 @@ client.on('connect', () => {
 client.on('error', (error) => {
     console.error('MQTT Error:', error);
 });
-client.on('close', () => {
-    //console.log('Disconnected from MQTT broker');
-});
+//client.on('close', () => {
+//console.log('Disconnected from MQTT broker');
+//});
 
-function endConnection() {
-    console.log('Ending MQTT connection');
-    client.end();
-}
+//function endConnection() {
+// console.log('Ending MQTT connection');
+//client.end();
+//}
