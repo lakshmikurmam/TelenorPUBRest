@@ -8,8 +8,8 @@ let messageCount = 0;
 const MQTT_TOPIC = 'MC/V1/testing';
 const MQTT_QOS = 1;
 //Testing
-var client = mqtt.connect('mqtt://test.mosquitto.org:1883');
-const client1 = mqtt.connect(`mqtt://${username}:${password}@${host}`, {
+//var client = mqtt.connect('mqtt://test.mosquitto.org:1883');
+const client = mqtt.connect(`mqtt://${username}:${password}@${host}`, {
     clientId,
     clean: true,
     rejectUnauthorized: false
