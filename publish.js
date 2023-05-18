@@ -21,7 +21,7 @@ client.on('connect', () => {
 
 
 
-    function publishmessage() {
+    setInterval(function publishmessage() {
         if (messageCount < 5) {
             let ts = Date.now();
 
@@ -45,8 +45,10 @@ client.on('connect', () => {
             // } else {
             //    endConnection();
         }
-    }
-    publishmessage();
+
+    }, 4000)
+
+
 });
 
 client.on('error', (error) => {
