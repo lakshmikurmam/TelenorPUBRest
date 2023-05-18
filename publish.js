@@ -41,7 +41,7 @@ client.on('connect', () => {
 
             console.log('Published message:', message);
 
-            setTimeout(publishmessage, 1000); // Publish a new message every 1 second
+            setTimeout(publishmessage, 5000); // Publish a new message every 1 second
         } else {
             endConnection();
         }
