@@ -15,51 +15,32 @@ const client = mqtt.connect(`mqtt://${username}:${password}@${host}`, {
     rejectUnauthorized: false
 });
 
+// MQTT connection event handlers
 client.on('connect', () => {
-    console.log('Connected to Telenor Connexion MQTT broker');
+    console.log('Connected to MQTT broker');
 
+    // Publish a message
+    //const topic = 'topic/to/publish';
+    const id = crypto.randomBytes(16).toString("hex");
+    const message = 'Hello, MQTT!' + id;
+    for (let i = 0; i < 5; i++) {
 
+        client.publish(MQTT_TOPIC, message, (error) => {
+            if (error) {
+                console.error('Failed to publish message:', error);
+            } else {
+                console.log('Message published successfully');
+            }
+        });
+    }
 
+    client.end(); // Close the MQTT connection after publishing
+});
 
-    setInterval(function publishmessage() {
-        //if (messageCount < 5) {
-        let ts = Date.now();
-
-        let date_ob = new Date(ts);
-        let date = date_ob.getDate();
-        let month = date_ob.getMonth() + 1;
-        let year = date_ob.getFullYear();
-        let rand = Math.random() * 100;
-        let sec = (Math.floor(ts / 1000));
-        const id = crypto.randomBytes(16).toString("hex");
-        let s1 = 'log generated MQ messages publishing :'
-        const messageprint1 = year + "-" + month + "-" + date + ":" + sec + s1 + rand + ":"
-        "seqid:" + id
-
-        const message = +rand + ":";
-        client.publish(MQTT_TOPIC, message, { qos: MQTT_QOS });
-        messageCount++;
-
-        console.log('Published message:  ', message);
-
-        // setTimeout(publishmessage, 5000); // Publish a new message every 1 second
-        // } else {
-        //    endConnection();
-        //}
-
-    }, 4000)
-
-
+client.on('close', () => {
+    console.log('Connection closed');
 });
 
 client.on('error', (error) => {
-    console.error('MQTT Error:', error);
+    console.error('MQTT error:', error);
 });
-//client.on('close', () => {
-//console.log('Disconnected from MQTT broker');
-//});
-
-//function endConnection() {
-// console.log('Ending MQTT connection');
-//client.end();
-//}
