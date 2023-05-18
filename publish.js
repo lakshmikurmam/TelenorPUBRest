@@ -8,12 +8,13 @@ const MQTT_TOPIC = 'MC/V1/testing';
 const MQTT_QOS = 1;
 let MQTT_MESSAGE;
 
-const client1 = mqtt.connect(`mqtt://${username}:${password}@${host}`, {
+const client = mqtt.connect(`mqtt://${username}:${password}@${host}`, {
     clientId,
     clean: true,
     rejectUnauthorized: false
 });
-var client = mqtt.connect('mqtt://test.mosquitto.org:1883');
+//Test purpose
+//var client = mqtt.connect('mqtt://test.mosquitto.org:1883');
 client.on('connect', function(topic, message, packet) {
     console.log('Connected to Telenor Connexion MQTT broker');
 });
