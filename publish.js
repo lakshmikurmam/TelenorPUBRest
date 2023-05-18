@@ -1,8 +1,8 @@
 const mqtt = require('mqtt');
 const crypto = require("crypto");
-const username = 'gepc-subs';
-const password = '14d1b530';
-const clientId = 'f44a7c6a-219f-417d-9a1d-f2bafd38ad53';
+const username = 'gepc-producer';
+const password = '26afc6e1';
+const clientId = '95cb7981-3d4c-4b35-aff0-73d5150be1be';
 const host = '10.246.0.10:1883';
 let messageCount = 0;
 const MQTT_TOPIC = 'MC/V1/testing';
@@ -22,7 +22,7 @@ client.on('connect', () => {
 
 
     function publishmessage() {
-        if (messageCount < 20) {
+        if (messageCount < 5) {
             let ts = Date.now();
 
             let date_ob = new Date(ts);
