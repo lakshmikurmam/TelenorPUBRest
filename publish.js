@@ -1,55 +1,62 @@
 const mqtt = require('mqtt');
 const crypto = require("crypto");
-const username = 'gepc-producer';
-const password = '26afc6e1';
-const clientId = '95cb7981-3d4c-4b35-aff0-73d5150be1be';
+const username = 'gepc-subs';
+const password = '14d1b530';
+const clientId = 'f44a7c6a-219f-417d-9a1d-f2bafd38ad53';
 const host = '10.246.0.10:1883';
+let messageCount = 0;
 const MQTT_TOPIC = 'MC/V1/testing';
-const MQTT_QOS = 10;
-let MQTT_MESSAGE;
-
+const MQTT_QOS = 1;
+//Testing
+//var client = mqtt.connect('mqtt://test.mosquitto.org:1883');
 const client = mqtt.connect(`mqtt://${username}:${password}@${host}`, {
     clientId,
     clean: true,
     rejectUnauthorized: false
 });
-//Test purpose
-//var client = mqtt.connect('mqtt://test.mosquitto.org:1883');
-client.on('connect', function(topic, message, packet) {
+
+client.on('connect', () => {
     console.log('Connected to Telenor Connexion MQTT broker');
-});
-// Publish message to MQTT topic
-setInterval(function() {
-    let ts = Date.now();
-    let date_ob = new Date(ts);
-    let date = date_ob.getDate();
-    let month = date_ob.getMonth() + 1;
-    let year = date_ob.getFullYear();
-    let rand = Math.random() * 100;
-    let sec = (Math.floor(ts / 1000));
-    const id = crypto.randomBytes(16).toString("hex");
-    const s = "log generated MQ messages publishing "
-    const seq = "seqid:"
-        //console.log(year + "-" + month + "-" + date + ":" + sec, "log generated MQ messages publishing :" + rand + ":", "seqid:" + id)
-    MQTT_MESSAGE = year + "-" + month + "-" + date + ":" + sec, +s + +rand + ":", +seq + +id
-        //'year + "-" + month + "-" + date + ":" + sec, "log generated MQ messages publishing :" + rand + ":", "seqid:" + id '
-    client.publish(MQTT_TOPIC, MQTT_MESSAGE, { qos: MQTT_QOS }, function(err) {
 
-        // client.publish(MQTT_TOPIC, MQTT_MESSAGE, { qos: MQTT_QOS }, String(rand), function(err) {
-        if (err) {
-            console.error(`Failed to publish message: ${err}`);
+
+
+
+    function publishmessage() {
+        if (messageCount < 20) {
+            let ts = Date.now();
+
+            let date_ob = new Date(ts);
+            let date = date_ob.getDate();
+            let month = date_ob.getMonth() + 1;
+            let year = date_ob.getFullYear();
+            let rand = Math.random() * 100;
+            let sec = (Math.floor(ts / 1000));
+            const id = crypto.randomBytes(16).toString("hex");
+            let s1 = 'log generated MQ messages publishing :'
+            const messageprint = year + "-" + month + "-" + date + ":" + sec + s1 + rand + ":"
+            "seqid:" + id
+            const message = 'Published message ' + messageprint + (messageCount + 1);
+            client.publish(MQTT_TOPIC, message, { qos: MQTT_QOS });
+            messageCount++;
+
+            console.log('Published message:', message);
+
+            setTimeout(publishmessage, 1000); // Publish a new message every 1 second
         } else {
-
-            console.log(`Message published to topic: ${MQTT_TOPIC} : ${MQTT_MESSAGE} ${s} ${seq}${id}`);
-
-            client.end();
-            console.log(`Connection END`);
+            endConnection();
         }
-    });
+    }
+    publishmessage();
+});
 
+client.on('error', (error) => {
+    console.error('MQTT Error:', error);
+});
+client.on('close', () => {
+    console.log('Disconnected from MQTT broker');
+});
 
-    client.on('error', function(err) {
-        console.error(`Failed to connect to MQTT broker: ${err}`);
-    });
-
-}, 4000);
+function endConnection() {
+    console.log('Ending MQTT connection');
+    client.end();
+}
