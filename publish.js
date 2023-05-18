@@ -35,8 +35,8 @@ client.on('connect', () => {
         let s1 = 'log generated MQ messages publishing :'
         const messageprint1 = year + "-" + month + "-" + date + ":" + sec + s1 + rand + ":"
         "seqid:" + id
-        const messageprint = +id
-        const message = +messageprint;
+
+        const message = +rand + ":";
         client.publish(MQTT_TOPIC, message, { qos: MQTT_QOS });
         messageCount++;
 
